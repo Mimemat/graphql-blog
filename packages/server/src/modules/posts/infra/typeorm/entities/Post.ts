@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -24,8 +25,12 @@ export class Post {
   @Column()
   content: string;
 
+  @Column()
+  creator_id: string;
+
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn({ name: 'creator_id' })
   creator: User;
 
   @Field(() => String)

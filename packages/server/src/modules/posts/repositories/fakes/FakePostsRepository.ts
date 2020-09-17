@@ -5,6 +5,7 @@ import { Post } from '@modules/posts/infra/typeorm/entities/Post';
 import {
   ICreatePostArgs,
   IPaginatedArgs,
+  IPaginatedResponse,
   IPostsRepository,
 } from '../IPostsRepository';
 
@@ -21,11 +22,14 @@ export class FakePostsRepository implements IPostsRepository {
     return newPost;
   }
 
-  public async findPaginated({ max, page }: IPaginatedArgs): Promise<Post[]> {
-    const startingPoint = max * page;
-    const endingPoint = max * (page + 1);
-
-    return this.posts.slice(startingPoint, endingPoint);
+  public async findPaginated({
+    max,
+    skip,
+  }: IPaginatedArgs): Promise<IPaginatedResponse> {
+    return {
+      data: this.posts.slice(skip, max * (skip + 1)),
+      total: this.posts.length,
+    };
   }
 
   public async findById(id: string): Promise<Post> {

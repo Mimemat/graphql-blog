@@ -8,5 +8,6 @@ module.exports = {
   name,
   verbose: true,
   preset: 'ts-jest',
+  setupFiles: ['<rootDir>/src/shared/tests/setupTests.ts'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/src/" }),
 };

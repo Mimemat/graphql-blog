@@ -33,7 +33,6 @@ module.exports = {
     'no-prototype-builtins': 'off',
     'no-restricted-syntax': 'off',
     'max-classes-per-file': 'off',
-    'better-styled-components/sort-declarations-alphabetically': 2,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'off',

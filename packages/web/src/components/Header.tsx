@@ -15,7 +15,7 @@ const Header: React.FC = () => {
 
   return (
     <Container onClick={handleNavigate}>
-      <SVGHeaderContainer>
+      <SVGHeaderContainer href="/">
         <GraphqLogo />
         <h1>Graphql Blog</h1>
       </SVGHeaderContainer>

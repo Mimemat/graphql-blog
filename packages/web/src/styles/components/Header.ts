@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 8rem;
   padding: 1rem;
 
   background-color: ${(props) => shade(0.2, props.theme.colors.primary)};
@@ -13,14 +13,22 @@ export const Container = styled.div`
   svg {
     width: 2rem;
   }
+
+  @media (min-width: 768px) {
+    height: 6rem;
+  }
 `;
 
-export const SVGHeaderContainer = styled.div`
+export const SVGHeaderContainer = styled.a`
   display: flex;
   width: 9rem;
   justify-content: space-between;
 
   align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  height: 100%;
 
   h1 {
     color: ${(props) => props.theme.colors.text};

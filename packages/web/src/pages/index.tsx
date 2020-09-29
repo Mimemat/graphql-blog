@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { gql } from '@apollo/client';
 
 import Header from '../components/Header';
 import Post from '../components/Post';
+import { client } from '../services/api';
 
 import {
   Container,
@@ -13,6 +16,18 @@ import {
 } from '../styles/pages/Landing';
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    client
+      .query({
+        query: gql`
+          query {
+            hello
+          }
+        `,
+      })
+      .then((response) => console.log(response));
+  }, []);
+
   return (
     <Container>
       <Header />

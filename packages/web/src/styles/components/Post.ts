@@ -22,7 +22,7 @@ export const Container = styled.a<IContainerProps>`
   background-size: cover;
 
   border-radius: 10px;
-  transition: all 0.1s ease-in;
+  transition: all 0.2s ease-in;
   cursor: pointer;
 
   color: ${(props) => props.theme.colors.text};
@@ -34,6 +34,6 @@ export const Container = styled.a<IContainerProps>`
   }
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
   }
 `;

@@ -16,5 +16,5 @@ Graphql blog system using Typeorm, NextJs and Apollo-server
 ## Non-functional Requirements
 - [x] GraphQl
 - [x] TypeORM
-- [ ] NextJs
+- [x] NextJs
 - [ ] Apollo

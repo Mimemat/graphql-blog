@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
-
-import { gql } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 
 import Header from '../components/Header';
-import Post from '../components/Post';
-import { client } from '../services/api';
+import Post, { IPost } from '../components/Post';
+import { client } from '../services/client';
+import { getPosts } from '../services/queries/posts';
 
 import {
   Container,
@@ -16,16 +15,18 @@ import {
 } from '../styles/pages/Landing';
 
 const Home: React.FC = () => {
+  const [posts, setPosts] = useState<IPost[]>([]);
+
   useEffect(() => {
     client
-      .query({
-        query: gql`
-          query {
-            hello
-          }
-        `,
-      })
-      .then((response) => console.log(response));
+      .request<{
+        findPaginatedPosts: {
+          data: IPost[];
+        };
+      }>(getPosts)
+      .then((response) => {
+        setPosts(response.findPaginatedPosts.data);
+      });
   }, []);
 
   return (
@@ -39,65 +40,18 @@ const Home: React.FC = () => {
         </SubTitle>
 
         <PostsText>Posts recentes</PostsText>
+        <PostsContainer>
+          {posts.map((post) => (
+            <Post
+              key={post.id}
+              post={{
+                ...post,
+                thumbnail: 'https://graphql.org/img/og_image.png',
+              }}
+            />
+          ))}
+        </PostsContainer>
       </Content>
-      <PostsContainer>
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-        <Post
-          post={{
-            id: '3',
-            thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-            title: 'Fazendo uma API com graphql',
-          }}
-        />
-      </PostsContainer>
     </Container>
   );
 };

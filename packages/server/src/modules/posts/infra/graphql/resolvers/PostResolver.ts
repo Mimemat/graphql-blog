@@ -1,13 +1,18 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { container } from 'tsyringe';
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
 import { IContext } from '@shared/infra/graphql/context/auth';
 
 import { CreatePostService } from '@modules/posts/services/CreatePostService';
+import { FindPaginatedPostsService } from '@modules/posts/services/FindPaginatedPostsService';
 
 import { Post } from '../../typeorm/entities/Post';
 import { PostCreationInput } from '../inputs/PostCreationInput';
+import {
+  PostPaginationInput,
+  PostPaginationResponst,
+} from '../inputs/PostPaginationInput';
 
 @Resolver(Post)
 export class PostResolver {
@@ -28,5 +33,18 @@ export class PostResolver {
     });
 
     return newPost;
+  }
+
+  @Query(() => PostPaginationResponst)
+  async findPaginatedPosts(
+    @Arg('data') data: PostPaginationInput
+  ): Promise<PostPaginationResponst> {
+    const findPaginatedPostsService = container.resolve(
+      FindPaginatedPostsService
+    );
+
+    const info = await findPaginatedPostsService.execute(data);
+
+    return info;
   }
 }

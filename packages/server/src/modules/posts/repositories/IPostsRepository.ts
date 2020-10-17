@@ -14,6 +14,8 @@ export interface IPaginatedResponse {
 
 export interface IPostsRepository {
   create(info: ICreatePostArgs): Promise<Post>;
+  createMany(info: ICreatePostArgs[]): Promise<Post[]>;
   findPaginated(info: IPaginatedArgs): Promise<IPaginatedResponse>;
   findById(id: string): Promise<Post>;
+  findManyByIds(id: string[]): Promise<Post[]>;
 }

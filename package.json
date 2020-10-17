@@ -13,6 +13,9 @@
       "**/typeorm"
     ]
   },
+  "scripts": {
+    "dev": "lerna run dev --stream"
+  },
   "devDependencies": {
     "@graphql-blog/eslint-config": "*",
     "@types/jest": "^26.0.13",

@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useMediaQuery } from 'react-responsive';
+
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Error from 'next/error';
+import { useRouter } from 'next/router';
 
 import Header from '../../components/Header';
 import { IPost } from '../../components/Post';
+import PostLoading from '../../components/PostLoading';
+import { client } from '../../services/client';
+import { getPost, getPosts } from '../../services/queries/posts';
 
 import { Container, Content, Title } from '../../styles/pages/posts/[postId]';
 
@@ -11,30 +17,79 @@ interface IFullPost extends IPost {
   content: string;
 }
 
-const post: IFullPost = {
-  id: '3',
-  thumbnail: 'https://i.ytimg.com/vi/T571423fC68/maxresdefault.jpg',
-  title: 'Fazendo uma API com graphql',
-  content: '# Fazendo uma API com graphql \n Para fazer essa api',
-};
+const Post: React.FC<{ post: IFullPost }> = ({ post }) => {
+  const { isFallback } = useRouter();
 
-const Post: React.FC = () => {
-  const isScreenBigger = useMediaQuery({ minDeviceWidth: 700 });
+  if (isFallback) {
+    return (
+      <Container>
+        <Header />
+        <Content>
+          <PostLoading />
+        </Content>
+      </Container>
+    );
+  }
 
-  return (
+  return post ? (
     <Container>
       <Header />
-
       <Content>
-        <Title backgroundImage={post.thumbnail}>
-          {isScreenBigger && <img src={post.thumbnail} alt={post.title} />}
+        <Title backgroundImage="https://graphql.org/img/og_image.png">
+          <img src="https://graphql.org/img/og_image.png" alt={post.title} />
           <h1>{post.title}</h1>
         </Title>
-
         <ReactMarkdown source={post.content} />
       </Content>
     </Container>
+  ) : (
+    <Error statusCode={404} title="Post not found" />
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const {
+    findPaginatedPosts: { data },
+  } = await client.request<{
+    findPaginatedPosts: {
+      data: IFullPost[];
+    };
+  }>(getPosts);
+
+  const paths = data.map((post) => {
+    return {
+      params: {
+        postId: post.id,
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps<{ post: IFullPost }> = async (
+  ctx
+) => {
+  const { postId } = ctx.params;
+
+  const response = await client
+    .request<{
+      findPost: IFullPost;
+    }>(getPost, {
+      id: postId,
+    })
+    .catch(() => {
+      return { findPost: null };
+    });
+
+  return {
+    props: {
+      post: response.findPost,
+    },
+  };
 };
 
 export default Post;

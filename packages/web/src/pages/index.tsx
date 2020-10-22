@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Header from '../components/Header';
 import Post, { IPost } from '../components/Post';
-import { client } from '../services/client';
+import { useQuery } from '../hooks/swr/useQuery';
 import { getPosts } from '../services/queries/posts';
 
 import {
@@ -15,19 +15,16 @@ import {
 } from '../styles/pages/Landing';
 
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, error] = useQuery<{
+    findPaginatedPosts: {
+      data: IPost[];
+    };
+  }>(getPosts);
 
-  useEffect(() => {
-    client
-      .request<{
-        findPaginatedPosts: {
-          data: IPost[];
-        };
-      }>(getPosts)
-      .then((response) => {
-        setPosts(response.findPaginatedPosts.data);
-      });
-  }, []);
+  if (error) {
+    alert('It seems that something has gone wrong');
+    console.error(error);
+  }
 
   return (
     <Container>
@@ -41,15 +38,17 @@ const Home: React.FC = () => {
 
         <PostsText>Posts recentes</PostsText>
         <PostsContainer>
-          {posts.map((post) => (
-            <Post
-              key={post.id}
-              post={{
-                ...post,
-                thumbnail: 'https://graphql.org/img/og_image.png',
-              }}
-            />
-          ))}
+          {posts
+            ? posts.findPaginatedPosts.data.map((post) => (
+                <Post
+                  key={post.id}
+                  post={{
+                    ...post,
+                    thumbnail: 'https://graphql.org/img/og_image.png',
+                  }}
+                />
+              ))
+            : Array.from(Array(20)).map((_, index) => <Post key={index} />)}
         </PostsContainer>
       </Content>
     </Container>

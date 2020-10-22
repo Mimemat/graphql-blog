@@ -6,6 +6,7 @@ import { IContext } from '@shared/infra/graphql/context/auth';
 
 import { CreatePostService } from '@modules/posts/services/CreatePostService';
 import { FindPaginatedPostsService } from '@modules/posts/services/FindPaginatedPostsService';
+import { FindPostService } from '@modules/posts/services/FindPostService';
 
 import { Post } from '../../typeorm/entities/Post';
 import { PostCreationInput } from '../inputs/PostCreationInput';
@@ -44,6 +45,15 @@ export class PostResolver {
     );
 
     const info = await findPaginatedPostsService.execute(data);
+
+    return info;
+  }
+
+  @Query(() => Post)
+  async findPost(@Arg('id') id: string): Promise<Post> {
+    const findPostService = container.resolve(FindPostService);
+
+    const info = await findPostService.execute(id);
 
     return info;
   }

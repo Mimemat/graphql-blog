@@ -14,6 +14,7 @@ export const Content = styled.div`
   padding: 2rem;
 
   flex-direction: column;
+  overflow: none;
 `;
 
 export const MainTitle = styled.h1`
@@ -42,6 +43,8 @@ export const PostsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  overflow: none;
 
   @media (min-width: 700px) {
     flex-direction: row;

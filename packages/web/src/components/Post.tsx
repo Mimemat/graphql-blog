@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container } from '../styles/components/Post';
+import { Container, PostSkeleton } from '../styles/components/Post';
 
 export interface IPost {
   id: string;
@@ -8,13 +8,13 @@ export interface IPost {
   thumbnail: string;
 }
 
-const Post: React.FC<{ post: IPost }> = ({
-  post: { title, thumbnail, id },
-}) => {
-  return (
-    <Container href={`/posts/${id}`} backgroundImage={thumbnail}>
-      <h2>{title}</h2>
+const Post: React.FC<{ post?: IPost }> = ({ post }) => {
+  return post ? (
+    <Container href={`/posts/${post.id}`} backgroundImage={post.thumbnail}>
+      <h2>{post.title}</h2>
     </Container>
+  ) : (
+    <PostSkeleton />
   );
 };
 

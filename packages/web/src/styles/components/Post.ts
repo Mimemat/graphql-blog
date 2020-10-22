@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Skeleton from './Skeleton';
+
 export interface IContainerProps {
   backgroundImage: string;
 }
@@ -36,4 +38,18 @@ export const Container = styled.a<IContainerProps>`
   &:hover {
     transform: translateY(-10px);
   }
+`;
+
+export const PostSkeleton = styled(Skeleton)`
+  height: 25rem;
+  width: 20rem;
+  max-width: 90%;
+
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+
+  margin: 1rem;
+  border-radius: 10px;
+  padding: 2rem;
 `;
